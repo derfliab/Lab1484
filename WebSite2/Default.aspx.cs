@@ -14,23 +14,49 @@ public partial class _Default : System.Web.UI.Page
     public string name = "Andrea Derflinger";
     protected void Page_Load(object sender, EventArgs e)
     {
-        /**{
-            try
-            {
-                System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
-                sc.ConnectionString = @"Server =Localhost           :;Database=Lab1;Trusted_Connection=Yes;";
-            }
-            catch (Exception)
-            {
-                resultmessage.Text = "Error Clearing Database.";
-            }
-        }
-        **/
+        selectSkills();
     }
     protected void InsertBtn_Click(object sender, EventArgs e)
     {
-        addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value),txtFirstName.Value, txtLastName.Value, txtMI.Value, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value, stateSelect.Value, txtCountry.Value, txtZip.Value,
-          DateTime.Parse(txtHire.Value), DateTime.Parse(txtTerm.Value), int.Parse(txtManager.Value), double.Parse(txtSalary.Value), name, DateTime.Now);
+        string MI;
+        string State;
+        DateTime Term;
+        int managerID;
+
+        if (txtMI.Value == "")
+        {
+            MI = "NULL";
+        }
+        else
+        {
+            MI = txtMI.Value;
+        }
+        if (txtState.Value == "")
+        {
+            State = "NULL";
+        }
+        else
+        {
+            State = txtState.Value;
+        }
+        if (txtTerm.Value == "")
+        {
+            Term = DateTime.MinValue;
+        }
+        else
+        {
+            Term = DateTime.Parse(txtTerm.Value);
+        }
+        if (String.IsNullOrEmpty(txtManager.Value))
+        {
+            managerID = -1;
+        }
+        else
+        {
+            managerID = int.Parse(txtManager.Value);
+        }
+        addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value),txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value, 
+            State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
 
     }
 
@@ -41,11 +67,11 @@ public partial class _Default : System.Web.UI.Page
         txtLastName.Value = "";
         txtMI.Value = "";
         txtDOB.Value = "";
-        skillsSelect.Value = "";
+        DropDownSkill.Text = "";
         txtHouseNumber.Value = "";
         txtStreet.Value = "";
         txtCity.Value = "";
-        stateSelect.Value = "";
+        txtState.Value = "";
         txtCountry.Value = "";
         txtZip.Value = "";
         txtHire.Value = "";
@@ -62,24 +88,91 @@ public partial class _Default : System.Web.UI.Page
     }
     private void EmployeeCommitInsert(Employee e)
     {
+        try
+        {
+            System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+            sc.ConnectionString = @"Server =Localhost ;Database=Lab1;Trusted_Connection=Yes;";
 
-        System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
-        sc.ConnectionString = @"Server =Localhost           :;Database=Lab1;Trusted_Connection=Yes;";
+            sc.Open();
 
-        sc.Open();
+            System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
+            insert.Connection = sc;
 
-        System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
-        insert.Connection = sc;
+            insert.CommandText = "insert into [dbo].[EMPLOYEE] values (" + e.EmployeeID + ", '" + e.FName + "', '" + e.LName;
+            if (e.MI == "NULL")
+            {
+                insert.CommandText += "', " + e.MI + ", '";
+            }
+            else
+            {
+                insert.CommandText += "', '" + e.MI + "', '";
+            }
+            insert.CommandText += e.HouseNum + "', '" + e.Street + "', '" + e.CityCountry;
+            if (e.State == "NULL")
+            {
+                insert.CommandText += "', " + e.State + ", '";
+            }
+            else
+            {
+                insert.CommandText += "', '" + e.State + "', '";
+            }
+            insert.CommandText += e.Country + "', '" + e.Zip + "', '" + e.DOB + "', '" + e.HireDate;
+            if (e.TermDate == DateTime.MinValue)
+            {
+                insert.CommandText += "', NULL, ";
+            }
+            else
+            {
+                insert.CommandText += "', '" + e.TermDate + "', ";
+            }
+            insert.CommandText += e.Salary;
+            if (e.ManagerID == -1)
+            {
+                insert.CommandText += ", NULL, '";
+            }
+            else
+            {
+                insert.CommandText += ", " + e.ManagerID + ", ";
+            }
+            insert.CommandText += e.LastUpdatedBy + "', '" + e.LastUpdated + "')";
+            
 
-        insert.CommandText = "insert into [dbo].[EMPLOYEE] values (" + e.EmployeeID + ", '" + e.FName + "', '" + e.LName + "', '" + e.MI + "', '" + "', '" + e.HouseNum + "', '" + e.Street +
-            "', '" + e.CityCountry + "', '" + e.State + "', '" + e.Country + "', '" + e.Zip + "', '"  + e.DOB + "', '" + e.HireDate + "', '" + e.TermDate + "', " + e.Salary + ", " + e.ManagerID + ", '" + e.LastUpdatedBy + "', '" + e.LastUpdated + "')";
-
-        insert.ExecuteNonQuery();
-        sc.Close();
-
+            Label.Text += insert.CommandText;
+            insert.ExecuteNonQuery();
+            sc.Close();
+        }
+        catch (Exception a)
+        {
+            Label.Text += "Error";
+            Label.Text += a.Message;
+        }
     }
 
+    private void selectSkills()
+    {
+ 
+        try
+        {
+            System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+            sc.ConnectionString = @"Server =Localhost ;Database=Lab1;Trusted_Connection=Yes;";
+            System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
+            insert.CommandText = "select SkillName from [dbo].[SKILL]";
+            insert.Connection = sc;
+            sc.Open();
+            DropDownSkill.DataSource = insert.ExecuteReader();
+            DropDownSkill.DataTextField = "SkillName";
+            DropDownSkill.DataBind();
+        }
+        catch (Exception s)
+        {
+            Label.Text += "Skill Error";
+        }
+            
 
+        
+         
+    }
+    
     protected void ExitBtn_Click(object sender, EventArgs e)
     {
 

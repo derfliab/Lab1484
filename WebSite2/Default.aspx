@@ -14,7 +14,7 @@
         }
  
         .auto-style1 {
-            width: 15%;
+            width: 16%;
         }
 
     
@@ -38,6 +38,7 @@
             <tr>
                 <td class="auto-style1">
                     <input type="text" id="txtFirstName" runat="server" />
+                    <asp:RequiredFieldValidator ID="reqFN" ControlToValidate="txtFirstName" Text="(Required)" Display="Dynamic" runat="server" />
                 </td>
                 <td>
                     <input type="text" id="txtHouseNumber" runat="server" />
@@ -89,10 +90,7 @@
                     
                 </td>
                 <td>
-                    <select id="stateSelect" style="width:128px" runat="server">
-                     
-                        <option value="VA">VA</option>
-                    </select>
+                    <input id ="txtState" type="text" runat="server" />
                 </td>
             </tr>
             <tr>
@@ -120,9 +118,12 @@
             <tr>
                 <td class="auto-style1">
 
-                    <select id="skillsSelect" style="width: 128px" runat="server" name="D1">
-                        <option value="VA">VA</option>
-                    </select></td>
+                    <asp:DropDownList ID="DropDownSkill" runat="server" Width="127px">
+                         
+                    </asp:DropDownList>
+                    
+
+                </td>
                 <td>
                      <input id="txtZip" type="text" runat="server"/>
                 </td>
@@ -191,6 +192,8 @@
         <asp:Button ID="ClearBtn" runat="server" style="margin-right:20px" OnClick="ClearBtn_Click" Text="Clear" />
         <asp:Button ID="EmployeeCommittBtn" runat="server" style="margin-right:20px" OnClick="EmployeeCommitBtn_Click" Text="Employee Commit" />
         <asp:Button ID="ExitBtn" runat="server" style="margin-right:20px" OnClick="ExitBtn_Click" Text="Exit" />
+
+        <asp:Label ID="Label" runat="server" />
     </div>
     </form>
 </body>
