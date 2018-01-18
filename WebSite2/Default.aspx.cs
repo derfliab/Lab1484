@@ -24,69 +24,75 @@ public partial class _Default : System.Web.UI.Page
     }
     protected void InsertBtn_Click(object sender, EventArgs e)
     {
-        if(compareName(txtFirstName.Value, txtLastName.Value) == true && compareID(txtEmployeeID.Value) == true)
+        if (compareName(txtFirstName.Value, txtLastName.Value) == true && compareID(txtEmployeeID.Value) == true)
         {
-        string MI;
-        string State;
-        DateTime Term;
-        int managerID;
+            string MI;
+            string State;
+            DateTime Term;
+            int managerID;
 
-        if (txtMI.Value == "")
-        {
-            MI = "NULL";
-        }
-        else
-        {
-            MI = txtMI.Value;
-        }
+            if (txtMI.Value == "")
+            {
+                MI = "NULL";
+            }
+            else
+            {
+                MI = txtMI.Value;
+            }
 
-        if (txtState.Value == "")
-        {
-            State = "NULL";
-        }
-        else
-        {
-            State = txtState.Value;
-        }
+            if (txtState.Value == "")
+            {
+                State = "NULL";
+            }
+            else
+            {
+                State = txtState.Value;
+            }
 
-        if (txtTerm.Value == "")
-        {
-            Term = DateTime.MinValue;
-        }
-        else
-        {
-            Term = DateTime.Parse(txtTerm.Value);
-        }
+            if (txtTerm.Value == "")
+            {
+                Term = DateTime.MinValue;
+            }
+            else
+            {
+                Term = DateTime.Parse(txtTerm.Value);
+            }
 
-        if (String.IsNullOrEmpty(txtManager.Value))
-        {
-            managerID = -1;
-        }
-        else
-        {
-            managerID = int.Parse(txtManager.Value);
-        }
-        
-        if (DateTime.Parse(txtHire.Value) < DateTime.Parse(txtTerm.Value)
+            if (String.IsNullOrEmpty(txtManager.Value))
+            {
+                managerID = -1;
+            }
+            else
+            {
+                managerID = int.Parse(txtManager.Value);
+            }
 
-            addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
-                State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
-        }
-        if (next == 3)
-        {
-            InsertBtn.Enabled = false;
-        }
+            if (DateTime.Parse(txtHire.Value) < DateTime.Parse(txtTerm.Value))
+            {
+
+                addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
+                    State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
+            }
+            if (next == 3)
+            {
+                InsertBtn.Enabled = false;
+            }
+            }
         else
         {
             Label.Text += "Name or EmployeeID already exists!";
         }
-        
-        
-
-        
+       
          
     }
-
+    private int checkAge(DateTime dob)
+    {
+        DateTime today = DateTime.Now;
+        int age = today.Year - dob.Year;
+        if (dob > today.AddYears(-age))
+            age--;
+        return age;
+    }
     private bool compareName(string firstName, string lastName)
     {
 
