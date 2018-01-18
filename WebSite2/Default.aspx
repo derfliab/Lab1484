@@ -38,7 +38,7 @@
             <tr>
                 <td class="auto-style1">
                     <input type="text" id="txtFirstName" runat="server" />
-                    <asp:RequiredFieldValidator ID="reqFN" ControlToValidate="txtFirstName" Text="(Required)" Display="Dynamic" runat="server" />
+                     
                 </td>
                 <td>
                     <input type="text" id="txtHouseNumber" runat="server" />
@@ -81,7 +81,7 @@
                     Date-Of-Birth:
                 </td>
                 <td>
-                    State:
+                    State*:
                 </td>
             </tr>
             <tr>
@@ -118,10 +118,7 @@
             <tr>
                 <td class="auto-style1">
 
-                    <asp:DropDownList ID="DropDownSkill" runat="server" Width="127px">
-                         
-                    </asp:DropDownList>
-                    
+                    <asp:DropDownList ID="DropDownSkill" runat="server" Width="127px"></asp:DropDownList>
 
                 </td>
                 <td>

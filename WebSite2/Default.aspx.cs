@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Configuration;
+using System.Data.SqlClient;
+
 
 
 public partial class _Default : System.Web.UI.Page
@@ -15,9 +18,14 @@ public partial class _Default : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         selectSkills();
+        
+         
+        
     }
     protected void InsertBtn_Click(object sender, EventArgs e)
     {
+        if(compareName(txtFirstName.Value, txtLastName.Value) == true && compareID(txtEmployeeID.Value) == true)
+        {
         string MI;
         string State;
         DateTime Term;
@@ -31,6 +39,7 @@ public partial class _Default : System.Web.UI.Page
         {
             MI = txtMI.Value;
         }
+
         if (txtState.Value == "")
         {
             State = "NULL";
@@ -39,6 +48,7 @@ public partial class _Default : System.Web.UI.Page
         {
             State = txtState.Value;
         }
+
         if (txtTerm.Value == "")
         {
             Term = DateTime.MinValue;
@@ -47,6 +57,7 @@ public partial class _Default : System.Web.UI.Page
         {
             Term = DateTime.Parse(txtTerm.Value);
         }
+
         if (String.IsNullOrEmpty(txtManager.Value))
         {
             managerID = -1;
@@ -55,10 +66,77 @@ public partial class _Default : System.Web.UI.Page
         {
             managerID = int.Parse(txtManager.Value);
         }
-        addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value),txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value, 
-            State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
+        
+        if (DateTime.Parse(txtHire.Value) < DateTime.Parse(txtTerm.Value)
+
+            addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
+                State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
+        }
+        if (next == 3)
+        {
+            InsertBtn.Enabled = false;
+        }
+        else
+        {
+            Label.Text += "Name or EmployeeID already exists!";
+        }
+        
+        
+
+        
+         
+    }
+
+    private bool compareName(string firstName, string lastName)
+    {
+
+        bool nameValidate = true;
+
+        for (int i=0; i < next; i++)
+        {
+            
+            string fullName = firstName.ToUpper() + lastName.ToUpper();
+            string array = addEmployee[i].FName.ToUpper() + addEmployee[i].LName.ToUpper();
+            
+            if (fullName == array )
+            {
+                nameValidate = false;
+                return nameValidate;
+                 
+                 
+            }
+
+             
+        }
+        return nameValidate;
+       
+    }
+
+    private bool compareID(string employeeID)
+    {
+
+        bool idValidate = true;
+
+        for (int i = 0; i < next; i++)
+        {
+
+            int insertID = int.Parse(txtEmployeeID.Value);
+            int array = addEmployee[i].EmployeeID;
+
+            if (insertID == array)
+            {
+                idValidate = false;
+                return idValidate;
+
+
+            }
+
+
+        }
+        return idValidate;
 
     }
+
 
     protected void ClearBtn_Click(object sender, EventArgs e)
     {
@@ -67,7 +145,6 @@ public partial class _Default : System.Web.UI.Page
         txtLastName.Value = "";
         txtMI.Value = "";
         txtDOB.Value = "";
-        DropDownSkill.Text = "";
         txtHouseNumber.Value = "";
         txtStreet.Value = "";
         txtCity.Value = "";
@@ -81,15 +158,21 @@ public partial class _Default : System.Web.UI.Page
     }
     protected void EmployeeCommitBtn_Click(object sender, EventArgs e)
     {
+        deleteAll();
         for (int i = 0; i < next; i++)
         {
             EmployeeCommitInsert(addEmployee[i]);
         }
+        next = 0;
+        Array.Clear(addEmployee, 0, addEmployee.Length);
+
     }
     private void EmployeeCommitInsert(Employee e)
     {
+        
         try
         {
+            
             System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
             sc.ConnectionString = @"Server =Localhost ;Database=Lab1;Trusted_Connection=Yes;";
 
@@ -98,7 +181,8 @@ public partial class _Default : System.Web.UI.Page
             System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
             insert.Connection = sc;
 
-            insert.CommandText = "insert into [dbo].[EMPLOYEE] values (" + e.EmployeeID + ", '" + e.FName + "', '" + e.LName;
+
+            insert.CommandText += "insert into [dbo].[EMPLOYEE] values (" + e.EmployeeID + ", '" + e.FName + "', '" + e.LName;
             if (e.MI == "NULL")
             {
                 insert.CommandText += "', " + e.MI + ", '";
@@ -132,7 +216,7 @@ public partial class _Default : System.Web.UI.Page
             }
             else
             {
-                insert.CommandText += ", " + e.ManagerID + ", ";
+                insert.CommandText += ", " + e.ManagerID + ", '";
             }
             insert.CommandText += e.LastUpdatedBy + "', '" + e.LastUpdated + "')";
             
@@ -140,6 +224,8 @@ public partial class _Default : System.Web.UI.Page
             Label.Text += insert.CommandText;
             insert.ExecuteNonQuery();
             sc.Close();
+
+            
         }
         catch (Exception a)
         {
@@ -147,7 +233,19 @@ public partial class _Default : System.Web.UI.Page
             Label.Text += a.Message;
         }
     }
+    private void deleteAll()
+    {
+        System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+        sc.ConnectionString = @"Server =Localhost ;Database=Lab1;Trusted_Connection=Yes;";
+        System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
+        insert.Connection = sc;
+        sc.Open();
+        insert.CommandText = "DELETE FROM [dbo].[EMPLOYEE]";
+        SqlDataReader data = insert.ExecuteReader();
+        sc.Close();
 
+
+    }
     private void selectSkills()
     {
  
@@ -162,10 +260,12 @@ public partial class _Default : System.Web.UI.Page
             DropDownSkill.DataSource = insert.ExecuteReader();
             DropDownSkill.DataTextField = "SkillName";
             DropDownSkill.DataBind();
+            sc.Close();
         }
         catch (Exception s)
         {
             Label.Text += "Skill Error";
+            Label.Text += s.Message;
         }
             
 
@@ -175,7 +275,9 @@ public partial class _Default : System.Web.UI.Page
     
     protected void ExitBtn_Click(object sender, EventArgs e)
     {
-
+        
+        Environment.Exit(0);
+         
     }
 
 }
