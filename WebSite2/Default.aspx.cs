@@ -15,21 +15,69 @@ public partial class _Default : System.Web.UI.Page
 
     public static int next = 0;
     public string name = "Andrea Derflinger";
+
     protected void Page_Load(object sender, EventArgs e)
     {
         selectSkills();
-        
+        clearLabel();
          
+  
         
     }
     protected void InsertBtn_Click(object sender, EventArgs e)
     {
-        if (compareName(txtFirstName.Value, txtLastName.Value) == true && compareID(txtEmployeeID.Value) == true)
+
+        
+            DateTime currentDate = DateTime.Now;
+            DateTime check = DateTime.Parse(txtDOB.Value).AddYears(18);
+            bool working = true;
+                if (txtTerm.Value != "")
+                {
+                   
+                
+                    if (compareDates(DateTime.Parse(txtHire.Value), DateTime.Parse(txtTerm.Value)) == false)
+                    {
+                        working = false;
+                        Label.Text += "Termination Date exceeds Hire Date";
+
+                    }
+                }
+                if (check.Date >= currentDate.Date)
+                {
+                    working = false;
+                    Label.Text += "Invalid Birth Day- Please make sure you are over 18.";
+
+                }
+                if (compareName(txtFirstName.Value, txtLastName.Value) == false && compareID(txtEmployeeID.Value) == false)
+                {
+                    working = false;
+                    Label.Text += "Name or ID already exist";
+                }
+                if (txtManager.Value != "")
+                {
+                     if (findManagerID(int.Parse(txtManager.Value))==false)
+                     {
+                        working = false;
+                        Label.Text += "Manager ID does not exist";
+                     }
+                 }
+                if (findState(txtState.Value)==false)
+                {
+                    working = false;
+                    Label.Text += "Enter a valid state";
+                }
+                if (txtCountry.Value != "US")
+                {
+                    working = false;
+            Label.Text += "Please make the country US";
+                }
+        if (working == true)
         {
             string MI;
             string State;
             DateTime Term;
             int managerID;
+
 
             if (txtMI.Value == "")
             {
@@ -52,6 +100,7 @@ public partial class _Default : System.Web.UI.Page
             if (txtTerm.Value == "")
             {
                 Term = DateTime.MinValue;
+
             }
             else
             {
@@ -67,32 +116,102 @@ public partial class _Default : System.Web.UI.Page
                 managerID = int.Parse(txtManager.Value);
             }
 
-            if (DateTime.Parse(txtHire.Value) < DateTime.Parse(txtTerm.Value))
-            {
 
-                addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
-                    State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
-            }
+            addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
+                              State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
+            Label.Text += "Employee has been inserted!";
+
+
             if (next == 3)
             {
                 InsertBtn.Enabled = false;
             }
-            }
-        else
-        {
-            Label.Text += "Name or EmployeeID already exists!";
-        }
+
+        }    
        
          
     }
-    private int checkAge(DateTime dob)
+    private bool findState(string state)
     {
-        DateTime today = DateTime.Now;
-        int age = today.Year - dob.Year;
-        if (dob > today.AddYears(-age))
-            age--;
-        return age;
+        string[] states = new string[] {"AK","AL","AR","AS","AZ","CA","CO","CT",
+                      "DC","DE","FL","GA","GU","HI","IA",
+                      "ID",
+                      "IL",
+                      "IN",
+                      "KS",
+                      "KY",
+                      "LA",
+                      "MA",
+                      "MD",
+                      "ME",
+                      "MI",
+                      "MN",
+                      "MO",
+                      "MS",
+                      "MT",
+                      "NC",
+                      "ND",
+                      "NE",
+                      "NH",
+                      "NJ",
+                      "NM",
+                      "NV",
+                      "NY",
+                      "OH",
+                      "OK",
+                      "OR",
+                      "PA",
+                      "PR",
+                      "RI",
+                      "SC",
+                      "SD",
+                      "TN",
+                      "TX",
+                      "UT",
+                      "VA",
+                      "VI",
+                      "VT",
+                      "WA",
+                      "WI",
+                      "WV",
+                      "WY" };
+        bool fstate = false;
+        for (int i = 0; i < states.Length; i++)
+        {
+           
+            string array = states[i];
+
+            if (state == array)
+            {
+                fstate = true;
+                return fstate;
+            }
+
+        }
+        return fstate;
     }
+
+
+    private bool compareDates(DateTime hiredate, DateTime termdate)
+    {
+        bool dateCompare = false;
+        if(termdate > hiredate)
+        {
+            
+            dateCompare = true;
+            return dateCompare;
+        }
+
+        return dateCompare;
+    }
+ 
+ 
+
+    private void clearLabel()
+    {
+        Label.Text = "";
+    }
+
     private bool compareName(string firstName, string lastName)
     {
 
@@ -116,6 +235,24 @@ public partial class _Default : System.Web.UI.Page
         }
         return nameValidate;
        
+    }
+
+    private bool findManagerID(int managerID)
+    {
+        bool findManager = false; 
+        for (int i=0; i<next; i++)
+        {
+            int array = addEmployee[i].ManagerID;
+            int currentID = managerID;
+
+            if (array == currentID)
+            {
+                findManager = true;
+                return findManager;
+            }
+
+        }
+        return findManager;
     }
 
     private bool compareID(string employeeID)
@@ -227,7 +364,7 @@ public partial class _Default : System.Web.UI.Page
             insert.CommandText += e.LastUpdatedBy + "', '" + e.LastUpdated + "')";
             
 
-            Label.Text += insert.CommandText;
+            Label.Text += "Employees have been committed!";
             insert.ExecuteNonQuery();
             sc.Close();
 

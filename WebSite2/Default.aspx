@@ -19,13 +19,20 @@
 
     
  
+        #txtEmployeeID {
+            margin-left: 0px;
+        }
+
+        
+ 
     </style>
 </head>
 <body>
+    
     <form id="form1" runat="server">
         <h1>Employee Form:</h1>
-    <div>
-        <table id="employeeinfo" style="width:100%"  >
+    <div> 
+        <table id="employeeinfo" style="width:200%"  >
            
             <tr>
                 <td class="auto-style1">
@@ -37,11 +44,11 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input type="text" id="txtFirstName" runat="server" />
+                    <input type="text" id="txtFirstName" required="" runat="server" maxlength ="20"  />
                      
                 </td>
                 <td>
-                    <input type="text" id="txtHouseNumber" runat="server" />
+                    <input type="text" id="txtHouseNumber" required="" runat="server" maxlength="10"/>
                 </td>
             </tr>
             <tr>
@@ -54,10 +61,10 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtLastName" type="text" runat="server"/>
+                    <input id="txtLastName" type="text" required="" runat="server" maxlength="30"/>
                 </td>
                 <td>
-                    <input id="txtStreet" type="text" runat="server"/>
+                    <input id="txtStreet" type="text" required="" runat="server" maxlength="20"/>
                 </td>
             </tr>
             <tr>
@@ -70,10 +77,10 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtMI" type="text" runat="server"/>
+                    <input id="txtMI" type="text" runat="server" maxlength="1"/>
                 </td>
                 <td>
-                    <input id="txtCity" type="text" runat="server"/>
+                    <input id="txtCity" type="text" required="" runat="server" maxlength="25"/>
                 </td>
             </tr>
             <tr>
@@ -86,11 +93,11 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtDOB" type="text" runat="server" placeholder="YYYY-MM-DD"/>
+                    <input id="txtDOB" type="text" required="" runat="server" placeholder="YYYY-MM-DD"/>
                     
                 </td>
                 <td>
-                    <input id ="txtState" type="text" runat="server" />
+                    <input id ="txtState" type="text" runat="server" maxlength="2" />
                 </td>
             </tr>
             <tr>
@@ -102,9 +109,9 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    &nbsp;<input id="txtEmployeeID" type="text" runat="server"/></td>
+                    <input id="txtEmployeeID" type="text" required="" runat="server" maxlength="1"/></td>
                 <td>
-                    <input id="txtCountry" type="text" runat="server"/>
+                    <input id="txtCountry" type="text" required="" runat="server" maxlength="2"/>
                 </td>
             </tr>
             <tr >
@@ -118,11 +125,11 @@
             <tr>
                 <td class="auto-style1">
 
-                    <asp:DropDownList ID="DropDownSkill" runat="server" Width="127px"></asp:DropDownList>
+                    <asp:DropDownList ID="DropDownSkill" required="" runat="server" Width="127px"></asp:DropDownList>
 
                 </td>
                 <td>
-                     <input id="txtZip" type="text" runat="server"/>
+                     <input id="txtZip" type="text" required="" runat="server" maxlength="5"/>
                 </td>
             </tr>
             <tr class="spaceUnder">
@@ -144,11 +151,13 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtHire" type="text" placeholder="YYYY-MM-DD" runat="server"/>
+                     
+                    <input id="txtHire" runat="server" type="text"/>
                      
                 </td>
                 <td>
-                    <input id="txtTerm" type="text" placeholder="YYYY-MM-DD" runat="server"/>
+                    <input id="txtTerm" runat="server" type="text"/>
+                     
                 </td>
             </tr>
             <tr>
@@ -161,10 +170,10 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtManager" type="text" runat="server"/>
+                    <input id="txtManager" type="text" runat="server" maxlength="1"/>
                 </td>
                 <td>
-                    <input id="txtSalary" type="text" runat="server"/>
+                    <input id="txtSalary" required="" type="text" runat="server"/>
                 </td>
             </tr>
              <tr>
@@ -188,11 +197,14 @@
         <asp:Button ID="InsertBtn" runat="server" style="margin-right:20px" OnClick="InsertBtn_Click" Text="Insert" />
         <asp:Button ID="ClearBtn" runat="server" style="margin-right:20px" OnClick="ClearBtn_Click" Text="Clear" />
         <asp:Button ID="EmployeeCommittBtn" runat="server" style="margin-right:20px" OnClick="EmployeeCommitBtn_Click" Text="Employee Commit" />
-        <asp:Button ID="ExitBtn" runat="server" style="margin-right:20px" OnClick="ExitBtn_Click" Text="Exit" />
-
+        <asp:Button ID="ExitBtn" runat="server" style="margin-right:20px" OnClick="ExitBtn_Click" Text="Exit" formnovalidate="" />
+        <br />
+        <br />
+        <br />
         <asp:Label ID="Label" runat="server" />
     </div>
     </form>
+    
 </body>
 </html>
 
