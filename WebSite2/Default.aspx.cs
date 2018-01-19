@@ -160,11 +160,11 @@ public partial class _Default : System.Web.UI.Page
     // Find the state in an array
     private bool findState(string state)
     {
-        string[] states = new string[] {"AK","AL","AR","AS","AZ","CA","CO","CT",
-                      "DC","DE","FL","GA","GU","HI","IA","ID","IL","IN","KS","KY",
-                      "LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
-                      "NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC",
-                      "SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY" };
+        string[] states = new string[] {"AK","ak","AL","al","AR","ar","AS","as","AZ","az","CA","ca","CO","co","CT","ct",
+                      "DC","dc","DE","de","FL","fl","GA","ga","GU","gu","HI","hi","IA","ia","ID","id","IL","il","IN","in","KS","ks","KY","ky",
+                      "LA","la","MA","ma","MD","md","ME","me","MI","mi","MN","mn","MO","mo","MS","ms","MT","mt","NC","nc","ND","nd","NE","ne",
+                      "NH","nh","NJ","nj","NM","nm","NV","nv","NY","ny","OH","oh","OK","ok","OR","or","PA","pa","PR","pr","RI","ri","SC","sc",
+                      "SD","sd","TN","tn","TX","tx","UT","ut","VA","va","VI","vi","VT","vt","WA","wa","WI","wi","WV","wv","WY","wy"};
         bool fstate = false;
         for (int i = 0; i < states.Length; i++)
         {
