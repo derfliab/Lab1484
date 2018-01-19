@@ -1,5 +1,12 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Default.aspx.cs" Inherits="_Default" %>
 
+<!--
+ * CIS 484-Lab 1
+ * Author: Andrea Derflinger 
+ * Date: 1/19/2018
+ * Honor Pledge: This work and I comply with the JMU Honor Code.
+-->
+
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -109,9 +116,9 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtEmployeeID" type="text" required="" runat="server" maxlength="1"/></td>
+                    <input id="txtEmployeeID" type="text" required="" runat="server"/></td>
                 <td>
-                    <input id="txtCountry" type="text" required="" runat="server" maxlength="2"/>
+                    <input id="txtCountry" type="text"   required="" runat="server" maxlength="2"/>
                 </td>
             </tr>
             <tr >
@@ -152,11 +159,11 @@
             <tr>
                 <td class="auto-style1">
                      
-                    <input id="txtHire" runat="server" type="text"/>
+                    <input id="txtHire" runat="server" type="text" placeholder="YYYY-MM-DD"/>
                      
                 </td>
                 <td>
-                    <input id="txtTerm" runat="server" type="text"/>
+                    <input id="txtTerm" runat="server" type="text" placeholder="YYYY-MM-DD"/>
                      
                 </td>
             </tr>
@@ -170,7 +177,7 @@
             </tr>
             <tr>
                 <td class="auto-style1">
-                    <input id="txtManager" type="text" runat="server" maxlength="1"/>
+                    <input id="txtManager" type="text" runat="server"/>
                 </td>
                 <td>
                     <input id="txtSalary" required="" type="text" runat="server"/>

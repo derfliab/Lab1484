@@ -7,6 +7,12 @@ using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Data.SqlClient;
 
+/**
+ * CIS 484-Lab 1
+ * Author: Andrea Derflinger 
+ * Date: 1/19/2018
+ * Honor Pledge: This work and I comply with the JMU Honor Code.
+**/
 
 
 public partial class _Default : System.Web.UI.Page
@@ -28,9 +34,14 @@ public partial class _Default : System.Web.UI.Page
     {
 
         
-            DateTime currentDate = DateTime.Now;
-            DateTime check = DateTime.Parse(txtDOB.Value).AddYears(18);
-            bool working = true;
+        DateTime currentDate = DateTime.Now;
+        DateTime check = DateTime.Parse(txtDOB.Value).AddYears(18);
+        DateTime oldcheck = DateTime.Parse(txtDOB.Value).AddYears(65);
+        bool working = true;
+        string country = txtCountry.Value;
+        // Checks Validation for the following if statements. If any of them return false, the employee will not be added to the array.
+
+                //Checks if the termination date has nothing in it
                 if (txtTerm.Value != "")
                 {
                    
@@ -42,17 +53,26 @@ public partial class _Default : System.Web.UI.Page
 
                     }
                 }
+                // Checks if the birthdate is over 18
                 if (check.Date >= currentDate.Date)
                 {
                     working = false;
                     Label.Text += "Invalid Birth Day- Please make sure you are over 18.";
 
                 }
+                // Checks if the birthdate is under 65
+                if (oldAge(DateTime.Parse(txtDOB.Value)) >= 65)
+                {
+                     working = false;
+                     Label.Text += "Invalid Birth Day- You must be younger than 65";
+                }
+                // Compare if the Name or EmployeeID have been inserted
                 if (compareName(txtFirstName.Value, txtLastName.Value) == false && compareID(txtEmployeeID.Value) == false)
                 {
                     working = false;
                     Label.Text += "Name or ID already exist";
                 }
+                // Checks if Manager ID exists
                 if (txtManager.Value != "")
                 {
                      if (findManagerID(int.Parse(txtManager.Value))==false)
@@ -60,17 +80,23 @@ public partial class _Default : System.Web.UI.Page
                         working = false;
                         Label.Text += "Manager ID does not exist";
                      }
-                 }
-                if (findState(txtState.Value)==false)
-                {
-                    working = false;
-                    Label.Text += "Enter a valid state";
                 }
-                if (txtCountry.Value != "US")
+                // Checks if State is a valid state
+                if (txtState.Value != "")
                 {
-                    working = false;
-            Label.Text += "Please make the country US";
+                     if (findState(txtState.Value) == false)
+                     {
+                        working = false;
+                        Label.Text += "Enter a valid state";
+                     }
                 }
+                // Checks if country is set to US
+                if (country.ToUpper() != "US")
+                {
+                   working = false;
+                   Label.Text += "Please make the country US";
+                }
+        // If all validation are working then the Employee will be added to the array
         if (working == true)
         {
             string MI;
@@ -116,12 +142,12 @@ public partial class _Default : System.Web.UI.Page
                 managerID = int.Parse(txtManager.Value);
             }
 
-
+            //Add Employee
             addEmployee[next++] = new Employee(int.Parse(txtEmployeeID.Value), txtFirstName.Value, txtLastName.Value, MI, DateTime.Parse(txtDOB.Value), txtHouseNumber.Value, txtStreet.Value, txtCity.Value,
                               State, txtCountry.Value, txtZip.Value, DateTime.Parse(txtHire.Value), Term, managerID, double.Parse(txtSalary.Value), name, DateTime.Now);
             Label.Text += "Employee has been inserted!";
 
-
+            // Enabled 
             if (next == 3)
             {
                 InsertBtn.Enabled = false;
@@ -131,50 +157,14 @@ public partial class _Default : System.Web.UI.Page
        
          
     }
+    // Find the state in an array
     private bool findState(string state)
     {
         string[] states = new string[] {"AK","AL","AR","AS","AZ","CA","CO","CT",
-                      "DC","DE","FL","GA","GU","HI","IA",
-                      "ID",
-                      "IL",
-                      "IN",
-                      "KS",
-                      "KY",
-                      "LA",
-                      "MA",
-                      "MD",
-                      "ME",
-                      "MI",
-                      "MN",
-                      "MO",
-                      "MS",
-                      "MT",
-                      "NC",
-                      "ND",
-                      "NE",
-                      "NH",
-                      "NJ",
-                      "NM",
-                      "NV",
-                      "NY",
-                      "OH",
-                      "OK",
-                      "OR",
-                      "PA",
-                      "PR",
-                      "RI",
-                      "SC",
-                      "SD",
-                      "TN",
-                      "TX",
-                      "UT",
-                      "VA",
-                      "VI",
-                      "VT",
-                      "WA",
-                      "WI",
-                      "WV",
-                      "WY" };
+                      "DC","DE","FL","GA","GU","HI","IA","ID","IL","IN","KS","KY",
+                      "LA","MA","MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
+                      "NH","NJ","NM","NV","NY","OH","OK","OR","PA","PR","RI","SC",
+                      "SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY" };
         bool fstate = false;
         for (int i = 0; i < states.Length; i++)
         {
@@ -191,7 +181,7 @@ public partial class _Default : System.Web.UI.Page
         return fstate;
     }
 
-
+    // Compare Termination  and Hire Date
     private bool compareDates(DateTime hiredate, DateTime termdate)
     {
         bool dateCompare = false;
@@ -212,6 +202,7 @@ public partial class _Default : System.Web.UI.Page
         Label.Text = "";
     }
 
+    // Compare the first name and last name entered to the names entered in the array
     private bool compareName(string firstName, string lastName)
     {
 
@@ -237,12 +228,13 @@ public partial class _Default : System.Web.UI.Page
        
     }
 
+    // Compare the ManagerID given to the EmployeeIDs in the array
     private bool findManagerID(int managerID)
     {
         bool findManager = false; 
         for (int i=0; i<next; i++)
         {
-            int array = addEmployee[i].ManagerID;
+            int array = addEmployee[i].EmployeeID;
             int currentID = managerID;
 
             if (array == currentID)
@@ -255,6 +247,7 @@ public partial class _Default : System.Web.UI.Page
         return findManager;
     }
 
+    // Compare EmployeeID given to EmployeeID in the array
     private bool compareID(string employeeID)
     {
 
@@ -280,7 +273,15 @@ public partial class _Default : System.Web.UI.Page
 
     }
 
+    //Find if the employee is older than 65
+    private int oldAge (DateTime dob)
+    {
+        int age = 0;
+        age = (DateTime.Today.Year - dob.Year);
+        return age;
+    }
 
+    // Clear Button
     protected void ClearBtn_Click(object sender, EventArgs e)
     {
         txtEmployeeID.Value = "";
@@ -299,6 +300,8 @@ public partial class _Default : System.Web.UI.Page
         txtSalary.Value = "";
         txtManager.Value = "";
     }
+
+    //Employee Commit Button
     protected void EmployeeCommitBtn_Click(object sender, EventArgs e)
     {
         deleteAll();
@@ -310,6 +313,8 @@ public partial class _Default : System.Web.UI.Page
         Array.Clear(addEmployee, 0, addEmployee.Length);
 
     }
+
+    //Employee Commit Insert
     private void EmployeeCommitInsert(Employee e)
     {
         
@@ -376,6 +381,8 @@ public partial class _Default : System.Web.UI.Page
             Label.Text += a.Message;
         }
     }
+
+    // Delete all data in the Database
     private void deleteAll()
     {
         System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
@@ -389,6 +396,8 @@ public partial class _Default : System.Web.UI.Page
 
 
     }
+
+    //Upload skills from the databse into the skills dropdown
     private void selectSkills()
     {
  
@@ -416,6 +425,7 @@ public partial class _Default : System.Web.UI.Page
          
     }
     
+    //Exit Button
     protected void ExitBtn_Click(object sender, EventArgs e)
     {
         
