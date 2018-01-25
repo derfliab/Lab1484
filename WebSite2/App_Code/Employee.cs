@@ -6,14 +6,6 @@ using System.Web;
 /// <summary>
 /// Summary description for Class1
 /// </summary>
-/// 
-
-/**
-* CIS 484-Lab 1
-* Author: Andrea Derflinger 
-* Date: 1/19/2018
-* Honor Pledge: This work and I comply with the JMU Honor Code.
-**/
 public class Employee
 {
     public string fName;
@@ -34,7 +26,7 @@ public class Employee
     String lastUpdateBy;
     DateTime lastUpdated;
 
-    public Employee(int employeeID, string fName, string lName, string mi, DateTime dateOfBirth, string houseNumber, string street,
+    public Employee(string fName, string lName, string mi, DateTime dateOfBirth, string houseNumber, string street,
         string cityCountry, string state, string country, string zip, DateTime hireDate, DateTime termDate, int managerID, double salary, string lastUpdateBy, DateTime lastUpdated)
     {
         EmployeeID = employeeID;
