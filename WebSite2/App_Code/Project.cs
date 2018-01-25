@@ -14,7 +14,7 @@ public class Project
     string lastUpdatedBy;
     DateTime lastUpdated;
 
-    public Project(string projectName, string projectDescription, string LastUpdatedBy, DateTime LastUpdated)
+    public Project(string projectName, string projectDescription, string lastUpdatedBy, DateTime lastUpdated)
     {
          
         ProjectName = projectName;

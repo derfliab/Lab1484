@@ -8,23 +8,23 @@ using System.Web;
 /// </summary>
 public class Employee
 {
-    public string fName;
-    string lName;
-    string mi;
-    DateTime dateOfBirth;
-    string houseNumber;
-    string street;
-    string cityCounty;
-    string state;
-    string country;
-    string zip;
-    DateTime hireDate;
-    DateTime termDate;
-    int managerID;
-    int employeeID;
-    double salary;
-    String lastUpdateBy;
-    DateTime lastUpdated;
+    private string fName;
+    private string lName;
+    private string mi;
+    private DateTime dateOfBirth;
+    private string houseNumber;
+    private string street;
+    private string cityCounty;
+    private string state;
+    private string country;
+    private string zip;
+    private DateTime hireDate;
+    private DateTime termDate;
+    private int managerID;
+    private int employeeID;
+    private double salary;
+    private String lastUpdateBy;
+    private DateTime lastUpdated;
 
     public Employee(string fName, string lName, string mi, DateTime dateOfBirth, string houseNumber, string street,
         string cityCountry, string state, string country, string zip, DateTime hireDate, DateTime termDate, int managerID, double salary, string lastUpdateBy, DateTime lastUpdated)

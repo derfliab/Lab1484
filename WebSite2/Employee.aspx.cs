@@ -401,4 +401,25 @@ public partial class _Default : System.Web.UI.Page
 
     }
 
+    private int findMax()
+    {
+        try
+        {
+            System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
+            sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
+            System.Data.SqlClient.SqlCommand insert = new System.Data.SqlClient.SqlCommand();
+            insert.Connection = sc;
+            sc.Open();
+            insert.CommandText = "SELECT MAX(EmployeeID) FROM [dbo].[EMPLOYEE]";
+            int i = (int)insert.ExecuteScalar();
+            sc.Close();
+            return i;
+
+        }
+        catch(Exception u)
+        {
+            return -1;
+        }
+    }
+
 }

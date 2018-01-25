@@ -14,7 +14,7 @@ public class Skill
     string lastUpdatedBy;
     DateTime lastUpdated;
 
-    public Skill(string skillName, string skillDescription, string LastUpdatedBy, DateTime LastUpdated)
+    public Skill(string skillName, string skillDescription, string lastUpdatedBy, DateTime lastUpdated)
     {
         SkillName = skillName;
         SkillDescription = skillDescription;

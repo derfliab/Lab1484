@@ -35,7 +35,7 @@ public partial class _Default : System.Web.UI.Page
         {
             try
             {
-
+                Skill newSkill = new Skill(txtskillName.Value, txtskillDescription.Value, "Andrea Derflinger", DateTime.Now);
                 System.Data.SqlClient.SqlConnection sc = new System.Data.SqlClient.SqlConnection();
                 sc.ConnectionString = @"Server =Localhost ;Database=Lab2;Trusted_Connection=Yes;";
 
@@ -45,7 +45,7 @@ public partial class _Default : System.Web.UI.Page
                 insert.Connection = sc;
 
 
-                insert.CommandText += "insert into [dbo].[SKILL] values ('" + txtskillName.Value + "', '" + txtskillDescription.Value + "', 'Andrea Derflinger', '" + DateTime.Now + "')";
+                insert.CommandText += "insert into [dbo].[SKILL] values ('" + newSkill.SkillName + "', '" + newSkill.SkillDescription + "', '" + newSkill.LastUpdatedBy + "', '" + newSkill.LastUpdated + "')";
 
 
 
